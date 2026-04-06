@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Finance Dashboard API — Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0f1a;
+      --surface: #111827;
+      --surface-2: #1a2235;
+      --border: #1e293b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --green: #22c55e;
+      --green-bg: rgba(34,197,94,.12);
+      --blue: #3b82f6;
+      --blue-bg: rgba(59,130,246,.12);
+      --amber: #f59e0b;
+      --amber-bg: rgba(245,158,11,.12);
+      --red: #ef4444;
+      --red-bg: rgba(239,68,68,.12);
+      --pink: #ec4899;
+      --pink-bg: rgba(236,72,153,.12);
+      --cyan: #06b6d4;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3rem;
+      background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,.15) 0%, transparent 60%);
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: .35rem .9rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      background: rgba(99,102,241,.12);
+      border: 1px solid rgba(99,102,241,.25);
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(135deg, #e2e8f0 30%, var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 1rem auto 2rem;
+      font-size: 1.05rem;
+    }
+    .hero-links { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+    .hero-links a {
+      padding: .6rem 1.4rem;
+      border-radius: .5rem;
+      font-weight: 600;
+      font-size: .9rem;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .hero-links a:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(99,102,241,.3);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    /* ---------- Container ---------- */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* ---------- Feature cards ---------- */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+      padding: 1rem 0 3rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: .75rem;
+      padding: 1.5rem;
+      transition: border-color .2s;
+    }
+    .feature-card:hover { border-color: var(--accent); }
+    .feature-icon {
+      width: 40px; height: 40px;
+      border-radius: .5rem;
+      display: grid; place-items: center;
+      font-size: 1.2rem;
+      margin-bottom: .75rem;
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: .3rem; }
+    .feature-card p  { font-size: .85rem; color: var(--text-muted); }
+
+    /* ---------- Section headers ---------- */
+    .section-header {
+      padding: 2.5rem 0 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    /* ---------- Role table ---------- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      font-size: .9rem;
+    }
+    th, td {
+      text-align: left;
+      padding: .65rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--surface);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    td { color: var(--text); }
+    .check { color: var(--green); }
+    .cross { color: var(--red); opacity: .5; }
+
+    /* ---------- Endpoint cards ---------- */
+    .endpoint-group { margin-bottom: 2.5rem; }
+    .endpoint-group h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: .6rem;
+      color: var(--text);
+    }
+    .endpoint {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: .65rem;
+      margin-bottom: .6rem;
+      overflow: hidden;
+    }
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .8rem 1rem;
+      cursor: pointer;
+      user-select: none;
+      transition: background .15s;
+    }
+    .endpoint-header:hover { background: var(--surface-2); }
+    .method {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: .3rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 600;
+      min-width: 56px;
+      text-align: center;
+      letter-spacing: .03em;
+    }
+    .method-get    { background: var(--green-bg);  color: var(--green); }
+    .method-post   { background: var(--blue-bg);   color: var(--blue); }
+    .method-patch  { background: var(--amber-bg);  color: var(--amber); }
+    .method-delete { background: var(--red-bg);    color: var(--red); }
+    .endpoint-path {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      color: var(--text);
+    }
+    .endpoint-roles {
+      margin-left: auto;
+      display: flex; gap: .3rem;
+    }
+    .role-tag {
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 600;
+      background: rgba(99,102,241,.1);
+      color: var(--accent-light);
+      border: 1px solid rgba(99,102,241,.2);
+    }
+    .endpoint-body {
+      display: none;
+      padding: 0 1rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .endpoint.open .endpoint-body { display: block; padding-top: 1rem; }
+    .endpoint-desc {
+      font-size: .88rem;
+      color: var(--text-muted);
+      margin-bottom: .8rem;
+    }
+    .code-label {
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+      margin-bottom: .3rem;
+    }
+    pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: .45rem;
+      padding: .8rem 1rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: .8rem;
+    }
+    .chevron {
+      margin-left: .5rem;
+      transition: transform .2s;
+      color: var(--text-muted);
+      font-size: .8rem;
+    }
+    .endpoint.open .chevron { transform: rotate(90deg); }
+
+    /* ---------- Setup section ---------- */
+    .setup-step {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: .5rem;
+      background: rgba(99,102,241,.12);
+      color: var(--accent-light);
+      display: grid; place-items: center;
+      font-weight: 700;
+      font-size: .85rem;
+    }
+    .step-content { flex: 1; }
+    .step-content h4 { font-size: .95rem; font-weight: 600; margin-bottom: .3rem; }
+    .step-content p  { font-size: .85rem; color: var(--text-muted); margin-bottom: .5rem; }
+
+    /* ---------- Footer ---------- */
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+      color: var(--text-muted);
+      font-size: .82rem;
+    }
+
+    /* ---------- Env table ---------- */
+    .env-table td:first-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      color: var(--cyan);
+      white-space: nowrap;
+    }
+    .env-table td:nth-child(2) {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .endpoint-roles { display: none; }
+      .hero { padding: 3rem 1rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero">
+    <span class="hero-badge">v1.0.0</span>
+    <h1>Finance Dashboard API</h1>
+    <p>A role-based access control backend for managing financial records, dashboards, and user accounts. Built with FastAPI, SQLAlchemy, Redis, and JWT authentication.</p>
+<!--    <div class="hero-links">-->
+<!--      <a href="/docs" class="btn-primary">Swagger UI →</a>-->
+<!--      <a href="/redoc" class="btn-secondary">ReDoc</a>-->
+<!--    </div>-->
+  </section>
+
+  <div class="container">
+
+    <!-- ==================== FEATURES ==================== -->
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--green-bg);color:var(--green);">🔐</div>
+        <h3>JWT Authentication</h3>
+        <p>Access + refresh token flow with configurable expiry.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--blue-bg);color:var(--blue);">👥</div>
+        <h3>Role-Based Access</h3>
+        <p>Three roles — Viewer, Analyst, Admin — with hierarchical permissions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--amber-bg);color:var(--amber);">📊</div>
+        <h3>Dashboard Analytics</h3>
+        <p>Income, expenses, category totals, and monthly trends.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:var(--pink-bg);color:var(--pink);">⚡</div>
+        <h3>Redis Caching</h3>
+        <p>Dashboard results cached with auto-invalidation on writes.</p>
+      </div>
+    </div>
+
+    <!-- ==================== ROLES ==================== -->
+    <div class="section-header">
+      <h2>👥 Role Hierarchy</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Viewer</th>
+          <th>Analyst</th>
+          <th>Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>View own profile</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>View dashboard summary</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>View recent transactions</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>List / view records</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Income / expense / trends analytics</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Category totals</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Create / update / delete records</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+        <tr><td>Manage users</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== ENVIRONMENT ==================== -->
+    <div class="section-header">
+      <h2>⚙️ Environment Variables</h2>
+    </div>
+    <table class="env-table">
+      <thead>
+        <tr><th>Variable</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>APP_NAME</td><td>"Finance Dashboard API"</td><td>Application display name</td></tr>
+        <tr><td>APP_ENV</td><td>development</td><td>Environment mode</td></tr>
+        <tr><td>DEBUG</td><td>true</td><td>Enables Swagger docs and verbose errors</td></tr>
+        <tr><td>SECRET_KEY</td><td>—</td><td>JWT signing secret (must change in production)</td></tr>
+        <tr><td>ALGORITHM</td><td>HS256</td><td>JWT algorithm</td></tr>
+        <tr><td>ACCESS_TOKEN_EXPIRE_MINUTES</td><td>30</td><td>Access token lifetime</td></tr>
+        <tr><td>REFRESH_TOKEN_EXPIRE_DAYS</td><td>7</td><td>Refresh token lifetime</td></tr>
+        <tr><td>DATABASE_URL</td><td>sqlite:///./finance_dashboard.db</td><td>Database connection string</td></tr>
+        <tr><td>REDIS_URL</td><td>redis://localhost:6379/0</td><td>Redis connection (optional — graceful fallback)</td></tr>
+        <tr><td>RATE_LIMIT_REQUESTS</td><td>60</td><td>Max requests per window per IP</td></tr>
+        <tr><td>RATE_LIMIT_WINDOW</td><td>60</td><td>Window duration in seconds</td></tr>
+        <tr><td>ADMIN_EMAIL</td><td>admin@example.com</td><td>Default admin email (first-run seed)</td></tr>
+        <tr><td>ADMIN_PASSWORD</td><td>Admin@1234</td><td>Default admin password (first-run seed)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ==================== AUTH ENDPOINTS ==================== -->
+    <div class="section-header">
+      <h2>🔑 Authentication</h2>
+    </div>
+    <div class="endpoint-group">
+
+      <!-- POST /auth/login -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-post">POST</span>
+          <span class="endpoint-path">/api/v1/auth/login</span>
+          <span class="endpoint-roles"><span class="role-tag">Public</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Authenticate with email and password. Returns access + refresh tokens.</p>
+          <p class="code-label">Request Body</p>
+<pre>{
+  "email": "admin@example.com",
+  "password": "Admin@1234"
+}</pre>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "access_token": "eyJhbGci...",
+  "refresh_token": "eyJhbGci...",
+  "token_type": "bearer"
+}</pre>
+          <p class="code-label">Error 401</p>
+<pre>{ "detail": "Incorrect email or password." }</pre>
+        </div>
+      </div>
+
+      <!-- POST /auth/refresh -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-post">POST</span>
+          <span class="endpoint-path">/api/v1/auth/refresh</span>
+          <span class="endpoint-roles"><span class="role-tag">Public</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Exchange a valid refresh token for a new access + refresh token pair.</p>
+          <p class="code-label">Request Body</p>
+<pre>{
+  "refresh_token": "eyJhbGci..."
+}</pre>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "access_token": "eyJhbGci...",
+  "refresh_token": "eyJhbGci...",
+  "token_type": "bearer"
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== USER ENDPOINTS ==================== -->
+    <div class="section-header">
+      <h2>👤 Users</h2>
+    </div>
+    <div class="endpoint-group">
+
+      <!-- POST /users/ -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-post">POST</span>
+          <span class="endpoint-path">/api/v1/users/</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Create a new user account.</p>
+          <p class="code-label">Request Body</p>
+<pre>{
+  "email": "user@example.com",
+  "full_name": "Jane Doe",
+  "password": "SecurePass123",
+  "role": "viewer"        // "viewer" | "analyst" | "admin"
+}</pre>
+          <p class="code-label">Response 201</p>
+<pre>{
+  "id": 2,
+  "email": "user@example.com",
+  "full_name": "Jane Doe",
+  "role": "viewer",
+  "is_active": true,
+  "created_at": "2026-04-06T15:22:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- GET /users/ -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/users/</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">List all users.</p>
+          <p class="code-label">Response 200</p>
+<pre>[
+  {
+    "id": 1,
+    "email": "admin@example.com",
+    "full_name": "System Admin",
+    "role": "admin",
+    "is_active": true,
+    "created_at": "2026-04-06T15:20:00Z"
+  }
+]</pre>
+        </div>
+      </div>
+
+      <!-- GET /users/me -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/users/me</span>
+          <span class="endpoint-roles"><span class="role-tag">Any Authenticated</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Get the currently authenticated user's profile.</p>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "id": 1,
+  "email": "admin@example.com",
+  "full_name": "System Admin",
+  "role": "admin",
+  "is_active": true,
+  "created_at": "2026-04-06T15:20:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- GET /users/:id -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/users/{user_id}</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Get any user by ID.</p>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "id": 2,
+  "email": "user@example.com",
+  "full_name": "Jane Doe",
+  "role": "viewer",
+  "is_active": true,
+  "created_at": "2026-04-06T15:22:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- PATCH /users/:id -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-patch">PATCH</span>
+          <span class="endpoint-path">/api/v1/users/{user_id}</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Update a user's role, name, or active status. All fields optional.</p>
+          <p class="code-label">Request Body</p>
+<pre>{
+  "full_name": "Jane Smith",    // optional
+  "role": "analyst",            // optional
+  "is_active": false            // optional
+}</pre>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "id": 2,
+  "email": "user@example.com",
+  "full_name": "Jane Smith",
+  "role": "analyst",
+  "is_active": false,
+  "created_at": "2026-04-06T15:22:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- DELETE /users/:id -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-delete">DELETE</span>
+          <span class="endpoint-path">/api/v1/users/{user_id}</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Permanently delete a user. Returns 204 No Content on success.</p>
+          <p class="code-label">Response 204</p>
+<pre>(no body)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== RECORD ENDPOINTS ==================== -->
+    <div class="section-header">
+      <h2>📒 Financial Records</h2>
+    </div>
+    <div class="endpoint-group">
+
+      <!-- POST /records/ -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-post">POST</span>
+          <span class="endpoint-path">/api/v1/records/</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Create a new financial record.</p>
+          <p class="code-label">Request Body</p>
+<pre>{
+  "amount": 5000.00,
+  "type": "income",         // "income" | "expense"
+  "category": "salary",
+  "date": "2026-04-01",
+  "notes": "March salary"   // optional
+}</pre>
+          <p class="code-label">Response 201</p>
+<pre>{
+  "id": 1,
+  "amount": 5000.00,
+  "type": "income",
+  "category": "salary",
+  "date": "2026-04-01",
+  "notes": "March salary",
+  "created_at": "2026-04-06T15:30:00Z",
+  "updated_at": "2026-04-06T15:30:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- GET /records/ -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/records/</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Viewer</span>
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">List financial records with optional filters.</p>
+          <p class="code-label">Query Parameters</p>
+<pre>?type=income           // filter by type
+&amp;category=salary       // filter by category
+&amp;date_from=2026-01-01  // start date
+&amp;date_to=2026-12-31    // end date
+&amp;limit=100             // pagination (1–500)
+&amp;offset=0              // pagination offset</pre>
+          <p class="code-label">Response 200</p>
+<pre>[
+  {
+    "id": 1,
+    "amount": 5000.00,
+    "type": "income",
+    "category": "salary",
+    "date": "2026-04-01",
+    "notes": "March salary",
+    "created_at": "2026-04-06T15:30:00Z",
+    "updated_at": "2026-04-06T15:30:00Z"
+  }
+]</pre>
+        </div>
+      </div>
+
+      <!-- GET /records/:id -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/records/{record_id}</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Viewer</span>
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Get a single record by ID.</p>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "id": 1,
+  "amount": 5000.00,
+  "type": "income",
+  "category": "salary",
+  "date": "2026-04-01",
+  "notes": "March salary",
+  "created_at": "2026-04-06T15:30:00Z",
+  "updated_at": "2026-04-06T15:30:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- PATCH /records/:id -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-patch">PATCH</span>
+          <span class="endpoint-path">/api/v1/records/{record_id}</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Update a record. All fields optional.</p>
+          <p class="code-label">Request Body</p>
+<pre>{
+  "amount": 5500.00,        // optional
+  "type": "income",         // optional
+  "category": "bonus",      // optional
+  "date": "2026-04-02",     // optional
+  "notes": "Updated note"   // optional
+}</pre>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "id": 1,
+  "amount": 5500.00,
+  "type": "income",
+  "category": "bonus",
+  "date": "2026-04-02",
+  "notes": "Updated note",
+  "created_at": "2026-04-06T15:30:00Z",
+  "updated_at": "2026-04-06T16:00:00Z"
+}</pre>
+        </div>
+      </div>
+
+      <!-- DELETE /records/:id -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-delete">DELETE</span>
+          <span class="endpoint-path">/api/v1/records/{record_id}</span>
+          <span class="endpoint-roles"><span class="role-tag">Admin</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Soft-delete a record (flags as deleted, not removed from DB). Returns 204.</p>
+          <p class="code-label">Response 204</p>
+<pre>(no body)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== DASHBOARD ENDPOINTS ==================== -->
+    <div class="section-header">
+      <h2>📊 Dashboard</h2>
+    </div>
+    <div class="endpoint-group">
+
+      <!-- GET /dashboard/summary -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/summary</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Viewer</span>
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Full dashboard overview with income, expenses, net balance, category totals, and recent transactions. Cached 5 minutes.</p>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "total_income": 15000.00,
+  "total_expenses": 8500.00,
+  "net_balance": 6500.00,
+  "category_totals": [
+    { "category": "salary", "total": 15000.00 },
+    { "category": "food", "total": 3500.00 }
+  ],
+  "recent_transactions": [
+    {
+      "id": 5,
+      "amount": 200.00,
+      "type": "expense",
+      "category": "food",
+      "date": "2026-04-05",
+      "notes": null,
+      "created_at": "2026-04-05T12:00:00Z",
+      "updated_at": "2026-04-05T12:00:00Z"
+    }
+  ]
+}</pre>
+        </div>
+      </div>
+
+      <!-- GET /dashboard/income -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/income</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Total income across all time.</p>
+          <p class="code-label">Response 200</p>
+<pre>{ "total_income": 15000.00 }</pre>
+        </div>
+      </div>
+
+      <!-- GET /dashboard/expenses -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/expenses</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Total expenses across all time.</p>
+          <p class="code-label">Response 200</p>
+<pre>{ "total_expenses": 8500.00 }</pre>
+        </div>
+      </div>
+
+      <!-- GET /dashboard/net-balance -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/net-balance</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Net balance (income − expenses).</p>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "total_income": 15000.00,
+  "total_expenses": 8500.00,
+  "net_balance": 6500.00
+}</pre>
+        </div>
+      </div>
+
+      <!-- GET /dashboard/categories -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/categories</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Totals grouped by category (descending).</p>
+          <p class="code-label">Response 200</p>
+<pre>[
+  { "category": "salary", "total": 15000.00 },
+  { "category": "food", "total": 3500.00 },
+  { "category": "transport", "total": 1200.00 }
+]</pre>
+        </div>
+      </div>
+
+      <!-- GET /dashboard/recent -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/recent</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Viewer</span>
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Most recent N transactions (default 10).</p>
+          <p class="code-label">Query Parameters</p>
+<pre>?limit=10   // 1–50</pre>
+          <p class="code-label">Response 200</p>
+<pre>[
+  {
+    "id": 5,
+    "amount": 200.00,
+    "type": "expense",
+    "category": "food",
+    "date": "2026-04-05",
+    "notes": null,
+    "created_at": "2026-04-05T12:00:00Z",
+    "updated_at": "2026-04-05T12:00:00Z"
+  }
+]</pre>
+        </div>
+      </div>
+
+      <!-- GET /dashboard/trends -->
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/api/v1/dashboard/trends</span>
+          <span class="endpoint-roles">
+            <span class="role-tag">Analyst</span>
+            <span class="role-tag">Admin</span>
+          </span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Month-by-month income vs expense breakdown.</p>
+          <p class="code-label">Query Parameters</p>
+<pre>?months=12   // 1–60</pre>
+          <p class="code-label">Response 200</p>
+<pre>[
+  {
+    "year": 2026,
+    "month": 3,
+    "income": 5000.00,
+    "expense": 2800.00,
+    "net": 2200.00
+  },
+  {
+    "year": 2026,
+    "month": 4,
+    "income": 5000.00,
+    "expense": 3100.00,
+    "net": 1900.00
+  }
+]</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== HEALTH ==================== -->
+    <div class="section-header">
+      <h2>💚 Health</h2>
+    </div>
+    <div class="endpoint-group">
+      <div class="endpoint">
+        <div class="endpoint-header" onclick="this.parentElement.classList.toggle('open')">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/health</span>
+          <span class="endpoint-roles"><span class="role-tag">Public</span></span>
+          <span class="chevron">▶</span>
+        </div>
+        <div class="endpoint-body">
+          <p class="endpoint-desc">Health check endpoint.</p>
+          <p class="code-label">Response 200</p>
+<pre>{
+  "status": "ok",
+  "app": "Finance Dashboard API"
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== AUTH FLOW ==================== -->
+    <div class="section-header">
+      <h2>🔄 Authentication Flow</h2>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Login</h4>
+        <p>POST <code>/api/v1/auth/login</code> with email + password. Receive an <strong>access token</strong> (30 min) and a <strong>refresh token</strong> (7 days).</p>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Use Access Token</h4>
+        <p>Include in the <code>Authorization</code> header: <code>Bearer &lt;access_token&gt;</code></p>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Refresh</h4>
+        <p>When the access token expires, POST <code>/api/v1/auth/refresh</code> with the refresh token to get a new pair.</p>
+      </div>
+    </div>
+
+    <!-- ==================== PROJECT SETUP ==================== -->
+    <div class="section-header">
+      <h2>🚀 Project Setup</h2>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Clone the repository</h4>
+<pre>git clone https://github.com/Harish-tig/Finance_Access_Control_Backend.git
+cd Finance_Access_Control_Backend</pre>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Create virtual environment</h4>
+<pre>python3 -m venv .venv
+source .venv/bin/activate</pre>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Install dependencies</h4>
+<pre>pip install -r requirements.txt</pre>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Configure environment</h4>
+        <p>Edit the <code>.env</code> file in the project root. At minimum, change <code>SECRET_KEY</code> to a strong random value for production.</p>
+<pre>SECRET_KEY=your-production-secret-here</pre>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Start Redis (optional)</h4>
+        <p>If you want caching and rate limiting. The app works without Redis (graceful fallback).</p>
+<pre>redis-server</pre>
+      </div>
+    </div>
+    <div class="setup-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Run the server</h4>
+<pre>uvicorn app.main:app --reload --host 0.0.0.0 --port 8000</pre>
+        <p>On first run, the database and default admin user are created automatically.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Finance Dashboard API v1.0.0 · Built with FastAPI, SQLAlchemy, Redis, and JWT
+  </footer>
+
+</body>
+</html>
