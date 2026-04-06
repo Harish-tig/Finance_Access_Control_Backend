@@ -19,7 +19,7 @@ app = FastAPI(
 @app.on_event("startup")
 def on_startup():
     init_db()
-    print(f"🚀 {settings.app_name} started in [{settings.app_env}] mode.")
+    print(f"{settings.app_name} started in [{settings.app_env}] mode.")
 
 
 @app.exception_handler(RequestValidationError)
@@ -54,7 +54,7 @@ app.include_router(dashboard.router, prefix="/api/v1")
 
 @app.get("/", include_in_schema=False)
 def serve_docs_page():
-    return FileResponse("index.html")
+    return FileResponse("apidocs/index.html")
 
 
 @app.get("/health", tags=["Health"])
